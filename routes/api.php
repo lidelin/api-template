@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Dingo\Api\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+$api = app(Router::class);
+
+$api->version('v1', function (Router $api) {
+    $api->group([
+        'namespace' => 'App\Http\Controllers',
+    ], function (Router $api) {
+        $api->get('posts', 'PostsController@index');
+
+        $api->group(['middleware' => ['auth']], function (Router $api) {
+
+        });
+    });
 });
